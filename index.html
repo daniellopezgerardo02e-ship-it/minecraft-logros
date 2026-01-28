@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MC Logros - Wiki</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #0d0d0d; color: #e0e0e0; font-family: 'Inter', sans-serif; }
+        .selected-logro { border-left: 4px solid #22c55e; background: #1a1a1a; }
+        .item-list li::before { content: "•"; color: #22c55e; font-weight: bold; margin-right: 8px; }
+    </style>
+</head>
+<body class="flex flex-col md:flex-row h-screen overflow-hidden">
+
+    <!-- Lista Lateral -->
+    <aside class="w-full md:w-80 bg-[#141414] border-r border-white/5 flex flex-col h-1/3 md:h-full">
+        <div class="p-5 border-b border-white/5 bg-[#1a1a1a]">
+            <h1 class="text-green-500 font-black text-xl italic tracking-tighter">MC_DATABASE</h1>
+            <p class="text-[10px] text-gray-500 uppercase font-bold">Lector de archivos individuales</p>
+        </div>
+        <div id="listaLogros" class="flex-1 overflow-y-auto p-2 space-y-1">
+            <!-- Los botones se generan aquí -->
+        </div>
+    </aside>
+
+    <!-- Contenido -->
+    <main class="flex-1 overflow-y-auto p-6 md:p-12 bg-[#0a0a0a]">
+        <div id="tutorial" class="hidden animate-fade-in">
+            <div class="flex items-center gap-5 mb-8">
+                <div id="vIcono" class="w-16 h-16 bg-green-500/10 border border-green-500/40 rounded-xl flex items-center justify-center text-3xl text-green-400"></div>
+                <div>
+                    <h2 id="vNombre" class="text-3xl md:text-4xl font-black text-white uppercase italic"></h2>
+                    <p id="vCat" class="text-green-500 font-bold text-xs tracking-widest"></p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <div class="bg-[#141414] p-5 rounded-xl border border-white/5">
+                    <h3 class="text-white font-bold text-sm mb-3 flex items-center gap-2">
+                        <i class="fas fa-backpack text-green-500"></i> INVENTARIO NECESARIO
+                    </h3>
+                    <ul id="vInv" class="text-gray-400 text-sm space-y-1 item-list"></ul>
+                </div>
+                <div class="bg-[#141414] p-5 rounded-xl border border-white/5">
+                    <h3 class="text-white font-bold text-sm mb-3 flex items-center gap-2">
+                        <i class="fas fa-plus-circle text-blue-500"></i> OPCIONALES
+                    </h3>
+                    <ul id="vOpc" class="text-gray-400 text-sm space-y-1 item-list"></ul>
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-white font-bold mb-4 uppercase text-xs tracking-widest opacity-50">Tutorial Paso a Paso</h3>
+                <div id="vPasos" class="space-y-3"></div>
+            </div>
+
+            <div class="p-5 bg-green-500/5 border-l-4 border-green-500 rounded-r-xl">
+                <p class="text-green-500 font-black text-[10px] uppercase mb-1">Consejo del Experto</p>
+                <p id="vPro" class="text-gray-300 text-sm italic"></p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // --- AQUÍ REGISTRAS TUS LOGROS ---
+        // Pon el nombre exacto del archivo que crees en la carpeta 'logros'
+        const listaArchivos = ['picar.js', 'llegamos.js'];
+
+        async function cargar() {
+            const container = document.getElementById('listaLogros');
+            for (const nombre of listaArchivos) {
+                const script = document.createElement('script');
+                script.src = `./logros/${nombre}`;
+                script.onload = () => {
+                    // La variable 'logroData' viene del archivo hijo
+                    const d = window.logroData; 
+                    const item = document.createElement('div');
+                    item.className = "p-4 rounded-lg cursor-pointer hover:bg-white/5 transition-all flex items-center gap-3";
+                    item.innerHTML = `<i class="fas ${d.icono} text-gray-600"></i> <span class="text-sm font-medium">${d.name}</span>`;
+                    item.onclick = () => mostrar(d, item);
+                    container.appendChild(item);
+                };
+                document.body.appendChild(script);
+            }
+        }
+
+        function mostrar(data, el) {
+            document.querySelectorAll('#listaLogros div').forEach(d => d.classList.remove('selected-logro'));
+            el.classList.add('selected-logro');
+            
+            document.getElementById('tutorial').classList.remove('hidden');
+            document.getElementById('vNombre').innerText = data.name;
+            document.getElementById('vIcono').innerHTML = `<i class="fas ${data.icono}"></i>`;
+            document.getElementById('vCat').innerText = data.categoria;
+            document.getElementById('vPro').innerText = data.proTip;
+            document.getElementById('vInv').innerHTML = data.inventoryNed.map(i => `<li>${i}</li>`).join('');
+            document.getElementById('vOpc').innerHTML = data.objetosOpcionales.map(i => `<li>${i}</li>`).join('');
+            document.getElementById('vPasos').innerHTML = data.tutorial.map((p, i) => `
+                <div class="flex gap-4 p-4 bg-[#141414] rounded-lg border border-white/5">
+                    <span class="text-green-500 font-bold">${i+1}</span>
+                    <p class="text-gray-300 text-sm">${p}</p>
+                </div>
+            `).join('');
+        }
+
+        window.onload = cargar;
+    </script>
+</body>
+</html>
+
