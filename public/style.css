@@ -1,0 +1,77 @@
+:root {
+    --bg-primary: #1e1e2e;
+    --bg-secondary: #282837;
+    --text-color: #f8f8f2;
+    --accent-java: #8be9fd;
+    --accent-bedrock: #ff79c6;
+    --shadow-color: rgba(0, 0, 0, 0.4);
+}
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+header {
+    text-align: center;
+    padding: 40px 20px;
+    background: var(--bg-secondary);
+    width: 100%;
+    box-shadow: 0 4px 8px var(--shadow-color);
+    margin-bottom: 30px;
+}
+.header-icon { color: var(--accent-java); width: 40px; height: 40px; margin-bottom: 10px; }
+.edition-selector {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 1000px;
+    padding: 20px;
+}
+.card {
+    background-color: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 30px;
+    width: 350px;
+    text-align: center;
+    box-shadow: 0 8px 16px var(--shadow-color);
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 1px solid #3a3a4c;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6);
+}
+.card-icon { width: 50px; height: 50px; margin-bottom: 15px; }
+.java .card-icon { color: var(--accent-java); }
+.bedrock .card-icon { color: var(--accent-bedrock); }
+.btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 25px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+.java-edition .btn { background-color: var(--accent-java); color: var(--bg-primary); }
+.bedrock-edition .btn { background-color: var(--accent-bedrock); color: var(--bg-primary); }
+.btn:hover { opacity: 0.8; }
+.achievement-card { text-align: left;}
+.achievement-card hr { border-color: #3a3a4c; margin: 10px 0;}
+.achievement-card .xp { color: var(--accent-java); font-weight: bold;}
+.achievement-card .gs { color: var(--accent-bedrock); font-weight: bold;}
+footer {
+    margin-top: auto;
+    padding: 20px;
+    width: 100%;
+    text-align: center;
+    background: #14141e;
+    color: #999;
+}
