@@ -1,0 +1,14 @@
+window.logroData = {
+    "name": "¿Quién Dijo Diamantes?",
+    "icono": "gem",
+    "categoria": "Minería Avanzada",
+    "inventoryNed": [
+        "Mineral de Diamante"
+    ],
+    "tutorial": [
+        "Desciende a las capas profundas (Y= -58 o inferior en el Overworld).",
+        "Usa un pico de hierro o mejor para minar el mineral."
+    ],
+    "proTip": "Nunca uses un pico de piedra para minar diamantes o hierro; ¡los destruirás! Siempre lleva cubos de agua para mitigar la lava.",
+    "edition": "bedrock"
+};
