@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Wiki de Logros de Minecraft Clásicos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Carga de la biblioteca principal de registro -->
+    <script src="logros/biblioteca.js"></script>
+    <!-- Carga de logros individuales -->
+    <script src="logros/picar.js"></script>
+    <script src="logros/dragon.js"></script>
+    <script src="logros/vuelo.js"></script>
+    <script src="logros/diamantes.js"></script>
+    <script src="logros/nether.js"></script>
+    <script src="logros/invocador.js"></script>
+    <script src="logros/pesca.js"></script>
+
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; margin: 0; padding-top: 50px; background-color: #e6e8e8; }
+        h1 { color: #333; }
+        .edition-container { display: flex; justify-content: center; gap: 30px; margin-top: 40px; }
+        .edition-button { padding: 15px 35px; font-size: 1.2em; cursor: pointer; border: none; border-radius: 10px; transition: transform 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .edition-button:hover { transform: translateY(-3px); }
+        #java-btn { background-color: #b05b1c; color: white; }
+        #bedrock-btn { background-color: #3b82f6; color: white; }
+        #logros-display { margin-top: 50px; background: white; padding: 20px; border-radius: 8px; max-width: 800px; margin-left: auto; margin-right: auto; text-align: left; }
+        ul { list-style: none; padding: 0; }
+        li { border-bottom: 1px solid #eee; padding: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Wiki de Logros de Minecraft: Exploración de Avances Clásicos</h1>
+    <p>Selecciona la edición de Minecraft para ver los logros específicos:</p>
+
+    <div class="edition-container">
+        <button id="java-btn" onclick="mostrarLogros('java')">Java Edition (Avances)</button>
+        <button id="bedrock-btn" onclick="mostrarLogros('bedrock')">Bedrock Edition (Logros)</button>
+    </div>
+
+    <div id="logros-display"></div>
+
+    <script>
+        // Función para mostrar los logros basada en la edición seleccionada
+        function mostrarLogros(edicion) {
+            const display = document.getElementById('logros-display');
+            display.innerHTML = `<h2>Logros de Minecraft ${edicion.toUpperCase()}</h2>`;
+            
+            if (window.logrosData && Array.isArray(window.logrosData)) {
+                const logrosFiltrados = window.logrosData.filter(logro => 
+                    logro.ediciones.includes(edicion)
+                ).sort((a, b) => a.titulo.localeCompare(b.titulo));
+
+                if (logrosFiltrados.length === 0) {
+                    display.innerHTML += `<p>No se encontraron logros específicos para ${edicion}.</p>`;
+                    return;
+                }
+
+                const ul = document.createElement('ul');
+                logrosFiltrados.forEach(logro => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<strong>${logro.titulo}</strong> (ID: ${logro.id})<br>${logro.descripcion}`;
+                    ul.appendChild(li);
+                });
+                display.appendChild(ul);
+            } else {
+                display.innerHTML += '<p>Error: La biblioteca de logros no ha cargado correctamente.</p>';
+            }
+        }
+    </script>
+</body>
+</html>
