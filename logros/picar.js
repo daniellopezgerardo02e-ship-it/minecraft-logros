@@ -1,8 +1,20 @@
-registrarLogro({
-    id: "inicio_basico",
-    titulo: "Picar la Madera",
-    descripcion: "Consigue el primer tronco de cualquier árbol y utilízalo para craftear tu primera mesa de trabajo.",
-    tipo: "Crafteo/Exploración",
-    requisitos: "Picar 1 tronco.",
-    ediciones: ["java", "bedrock"]
-});
+window.logroData = window.logroData || {};
+window.logroData.picar = {
+    id: "picar",
+    name: "¡A Picar!",
+    description: "Construye un pico básico de cualquier material (madera, piedra, etc.).",
+    requirements: {
+        java: "Craftear cualquier pico.",
+        bedrock: "Fabricar un pico usando una mesa de crafteo."
+    },
+    editionSpecific: {
+        java: {
+            parent: "Obtener Madera",
+            xp: 10
+        },
+        bedrock: {
+            gamerscore: 10
+        }
+    },
+    tip: "El pico se craftea con 2 palos y 3 materiales horizontales en la parte superior de la mesa."
+};
