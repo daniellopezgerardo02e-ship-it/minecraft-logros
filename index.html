@@ -1,60 +1,165 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MineCraft Repo Dashboard: 67daniel_prro</title>
+    <title>Minecraft Achievements Wiki</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Importamos la biblioteca de logros -->
+    <script src="logros/biblioteca.js"></script>
     <style>
-        body { font-family: 'Consolas', monospace; background-color: #1a1a1a; color: #00ff00; margin: 0; padding: 20px; }
-        .container { max-width: 900px; width: 100%; margin: 0 auto; background-color: #2b2b2b; border: 1px solid #00ff00; box-shadow: 0 0 10px rgba(0, 255, 0, 0.5); padding: 20px; }
-        h1 { color: #ff8800; border-bottom: 2px solid #00ff00; padding-bottom: 10px; margin-top: 0; }
-        .section { margin-top: 20px; }
-        .section h2 { color: #00ffff; margin-bottom: 10px; }
-        ul { list-style-type: none; padding-left: 0; }
-        li { margin-bottom: 5px; }
-        .file { color: #ffff00; }
-        .status { color: #88ff88; }
-        .logro { margin-top: 15px; padding: 10px; background-color: #3a3a3a; border-left: 5px solid #ff00ff; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap');
+        
+        body { 
+            background-color: #09090b; 
+            color: #fafafa; 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-image: 
+                radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+
+        .achievement-card {
+            background: rgba(24, 24, 27, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .achievement-card:hover {
+            transform: translateY(-5px);
+            border-color: #22c55e;
+            box-shadow: 0 10px 30px -10px rgba(34, 197, 94, 0.3);
+        }
+
+        .glass-nav {
+            background: rgba(9, 9, 11, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .category-badge {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
     </style>
 </head>
-<body>
-    <div class="container">
-        <h1>[WIZARD DASHBOARD] - Repo 67daniel_prro2023567</h1>
-        
-        <div class="section">
-            <h2>System Status</h2>
-            <p class="status">Status: Online and operational.</p>
-            <p class="status">Last Update: 2023-10-27 (Iteration 2)</p>
-        </div>
+<body class="min-h-screen pb-20">
 
-        <div class="section">
-            <h2>Current Repository Structure</h2>
-            <ul>
-                <li><span class="file">/</span></li>
-                <li>├── <span class="file">README.md</span> (Overview)</li>
-                <li>├── <span class="file">index.html</span> (Dashboard)</li>
-                <li>├── <span class="file">config/</span></li>
-                <li>│   └── <span class="file">repository_id.txt</span></li>
-                <li>├── <span class="file">docs/</span></li>
-                <li>│   └── <span class="file">achievements.json</span> (2 Achievements Unlocked)</li>
-                <li>├── <span class="file">scripts/</span></li>
-                <li>│   └── <span class="file">setup.sh</span></li>
-                <li>└── <span class="file">src/</span> (New Module)</li>
-                <li>    └── <span class="file">main.py</span> (Placeholder)</li>
-            </ul>
-        </div>
-
-        <div class="section">
-            <h2>Achievements (Logros)</h2>
-            <div class="logro">
-                <p><strong>✨ Repo Genesis (★☆☆☆☆)</strong></p>
-                <p>Initial commit and structure setup based on ID 67daniel_prro2023567.</p>
+    <!-- Navegación -->
+    <nav class="glass-nav sticky top-0 z-50 px-6 py-4 mb-12">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="bg-green-500 p-2 rounded-lg">
+                    <i data-lucide="trophy" class="text-black w-5 h-5"></i>
+                </div>
+                <h1 class="text-xl font-black uppercase italic tracking-tighter">Wiki<span class="text-green-500">Logros</span></h1>
             </div>
-            <div class="logro">
-                <p><strong>🏗️ Structure Builder (★★☆☆☆)</strong></p>
-                <p>Expanded core repository structure by adding the 'src' directory and documentation.</p>
+            <div class="hidden md:flex gap-6 text-xs font-bold uppercase tracking-widest text-gray-400">
+                <a href="#" class="hover:text-green-500 transition-colors">Java</a>
+                <a href="#" class="hover:text-green-500 transition-colors">Bedrock</a>
+                <a href="#" class="hover:text-green-500 transition-colors">Guías</a>
             </div>
         </div>
-    </div>
+    </nav>
+
+    <!-- Header Principal -->
+    <header class="max-w-6xl mx-auto px-6 mb-16">
+        <div class="bg-gradient-to-br from-green-500/20 to-transparent p-12 rounded-[3rem] border border-green-500/20">
+            <h2 class="text-5xl md:text-7xl font-black italic uppercase tracking-tighter mb-4">
+                Explora los <br><span class="text-green-500">Logros</span>
+            </h2>
+            <p class="text-gray-400 max-w-xl text-lg leading-relaxed">
+                Base de datos dinámica alimentada desde tus archivos de datos. Completa el árbol de tecnología y domina el mundo.
+            </p>
+        </div>
+    </header>
+
+    <!-- Grid de Logros -->
+    <main class="max-w-6xl mx-auto px-6">
+        <div class="flex items-center justify-between mb-8">
+            <h3 class="text-sm font-black uppercase tracking-[0.3em] text-gray-500">Logros de la Biblioteca</h3>
+            <div class="flex gap-2 text-xs text-gray-400">
+                <span id="counter">Cargando logros...</span>
+            </div>
+        </div>
+
+        <!-- Contenedor Dinámico -->
+        <div id="achievements-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Los logros se insertarán aquí automáticamente -->
+        </div>
+    </main>
+
+    <footer class="max-w-6xl mx-auto px-6 mt-20 text-center border-t border-white/5 pt-10">
+        <p class="text-gray-600 text-[10px] uppercase tracking-[0.5em] font-mono">
+            Sincronizado con logros/biblioteca.js
+        </p>
+    </footer>
+
+    <script>
+        // Función para renderizar las estrellas de dificultad
+        function getStars(difficulty) {
+            let count = 1;
+            if (difficulty.toLowerCase() === 'media') count = 2;
+            if (difficulty.toLowerCase() === 'dificil' || difficulty.toLowerCase() === 'difícil' || difficulty.toLowerCase() === 'extrema') count = 3;
+            
+            let starsHtml = '';
+            for(let i = 0; i < 3; i++) {
+                const color = i < count ? 'text-yellow-500 fill-yellow-500' : 'text-gray-700';
+                starsHtml += `<i data-lucide="star" class="w-3 h-3 ${color}"></i>`;
+            }
+            return starsHtml;
+        }
+
+        // Función principal para cargar logros
+        function loadAchievements() {
+            const grid = document.getElementById('achievements-grid');
+            const counter = document.getElementById('counter');
+            
+            // Verificamos si la biblioteca existe
+            if (!window.bibliotecaLogros) {
+                grid.innerHTML = '<p class="text-red-500 col-span-3 text-center">Error: biblioteca.js no encontrada.</p>';
+                return;
+            }
+
+            counter.innerText = `${window.bibliotecaLogros.length} LOGROS DISPONIBLES`;
+
+            grid.innerHTML = window.bibliotecaLogros.map(logro => `
+                <div class="achievement-card p-8 rounded-[2rem] group flex flex-col h-full">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="w-14 h-14 bg-green-500/10 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <i data-lucide="${logro.icono || 'award'}" class="text-green-500 w-7 h-7"></i>
+                        </div>
+                        <span class="category-badge px-3 py-1 rounded-full text-[10px] font-black uppercase">
+                            ${logro.categoria}
+                        </span>
+                    </div>
+                    
+                    <h4 class="text-2xl font-black italic uppercase mb-2 tracking-tighter">${logro.name}</h4>
+                    
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6 flex-grow">
+                        ${logro.tutorial ? logro.tutorial[0] : 'Sin descripción disponible.'}
+                    </p>
+                    
+                    <div class="pt-6 border-t border-white/5 flex justify-between items-center">
+                        <div class="flex gap-1">
+                            ${getStars(logro.dificultad || 'Facil')}
+                        </div>
+                        <span class="text-[9px] font-bold text-gray-500 uppercase">
+                            ID: ${logro.id}
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+
+            // Re-inicializar iconos de Lucide para los nuevos elementos
+            lucide.createIcons();
+        }
+
+        // Ejecutar al cargar la página
+        window.addEventListener('DOMContentLoaded', loadAchievements);
+    </script>
 </body>
 </html>
