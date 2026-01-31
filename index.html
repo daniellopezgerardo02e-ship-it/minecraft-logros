@@ -72,16 +72,10 @@
     <!-- Pantalla de Login / Configuración -->
     <div id="login-screen" class="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-[#09090b]">
         <div class="login-card w-full max-w-md p-10 rounded-[3rem] text-center">
-            <h2 class="text-3xl font-black uppercase italic tracking-tighter mb-2">Configuración</h2>
+            <h2 class="text-4xl font-black uppercase italic tracking-tighter mb-8">Bienvenido <br><span class="text-green-500">Miner</span></h2>
             
-            <!-- Campo para la API KEY -->
-            <div class="mb-8 text-left">
-                <label class="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-2 block">Gemini API Key</label>
-                <input type="password" id="api-key-input" placeholder="Pega tu clave aquí..." class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-sm focus:border-purple-500 transition-all outline-none">
-            </div>
-
             <div class="space-y-4 mb-10 text-left">
-                <label class="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-2 block">Plataforma</label>
+                <label class="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-2 block">Selecciona tu Plataforma</label>
                 <div class="flex gap-2">
                     <button onclick="selectPlatform('java')" id="btn-java" class="platform-btn flex-1 p-4 rounded-2xl bg-white/5 flex items-center justify-center gap-2">
                         <i data-lucide="coffee" class="w-4 h-4"></i> Java
@@ -177,7 +171,10 @@
     </div>
 
     <script>
-        let apiKey = ""; 
+        // CONFIGURACIÓN INTERNA: Pon tu API Key aquí directamente
+        const INTERNAL_GEMINI_KEY = ""; // El entorno inyectará la clave automáticamente si está configurada
+
+        let apiKey = INTERNAL_GEMINI_KEY; 
         let currentPlatform = null;
         let visibleLogros = [];
         let currentLogroIndex = null;
@@ -192,9 +189,7 @@
         }
 
         function enterWiki() {
-            apiKey = document.getElementById('api-key-input').value;
             localStorage.setItem('mc_session_platform', currentPlatform);
-            localStorage.setItem('mc_api_key', apiKey);
             checkSession();
         }
 
@@ -205,10 +200,8 @@
 
         function checkSession() {
             const platform = localStorage.getItem('mc_session_platform');
-            const storedKey = localStorage.getItem('mc_api_key');
             if (platform) {
                 currentPlatform = platform;
-                apiKey = storedKey || "";
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('main-content').classList.remove('hidden');
                 document.getElementById('platform-text').innerText = platform.toUpperCase();
@@ -217,11 +210,8 @@
             lucide.createIcons();
         }
 
-        // --- CORRECCIÓN DE CARGA DE LOGROS ---
         function renderLogros(platform) {
             const grid = document.getElementById('achievements-grid');
-            
-            // Verificamos si la variable existe en window (biblioteca.js debe definirla así)
             const source = window.bibliotecaLogros || [];
             
             visibleLogros = source.filter(logro => {
@@ -249,24 +239,31 @@
             lucide.createIcons();
         }
 
-        // --- GEMINI API ---
-        async function callGemini(prompt, systemPrompt = "Eres un experto en Minecraft. Responde solo texto plano, sin Markdown extraño ni símbolos como # o *.") {
-            if(!apiKey) return "Por favor, introduce una API Key en la configuración.";
-            try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: prompt }] }],
-                        systemInstruction: { parts: [{ text: systemPrompt }] }
-                    })
-                });
-                const data = await response.json();
-                let text = data.candidates?.[0]?.content?.parts?.[0]?.text || "No hay respuesta.";
-                // Limpiamos caracteres que suelen ensuciar el chat
-                return text.replace(/[#*`´]/g, '').trim();
-            } catch (error) {
-                return "Error en la conexión con Gemini.";
+        // --- GEMINI API CON MANEJO DE RETINTOS ---
+        async function callGemini(prompt, systemPrompt = "Eres un experto en Minecraft. Responde solo texto plano, muy directo, sin Markdown, sin asteriscos ni almohadillas.") {
+            let delay = 1000;
+            for (let i = 0; i < 5; i++) {
+                try {
+                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: prompt }] }],
+                            systemInstruction: { parts: [{ text: systemPrompt }] }
+                        })
+                    });
+                    
+                    if (!response.ok) throw new Error("Retry");
+
+                    const data = await response.json();
+                    let text = data.candidates?.[0]?.content?.parts?.[0]?.text || "No hay respuesta.";
+                    // Limpieza agresiva de caracteres especiales
+                    return text.replace(/[#*`´_]/g, '').trim();
+                } catch (error) {
+                    if (i === 4) return "La IA está saturada. Inténtalo de nuevo en un momento.";
+                    await new Promise(r => setTimeout(r, delay));
+                    delay *= 2;
+                }
             }
         }
 
@@ -275,7 +272,7 @@
             const logro = visibleLogros[currentLogroIndex];
             box.classList.remove('hidden');
             box.innerText = "Analizando estrategia...";
-            const res = await callGemini(`Estrategia rápida para el logro: ${logro.name}`);
+            const res = await callGemini(`Dame una estrategia de una frase para el logro: ${logro.name}`);
             box.innerText = res;
         }
 
@@ -294,7 +291,7 @@
         }
 
         async function generateDailyChallenge() {
-            const res = await callGemini("Genera un reto corto de Minecraft.");
+            const res = await callGemini("Genera un mini reto de Minecraft de 5 palabras.");
             document.getElementById('welcome-msg').innerHTML = `<span class="text-green-500 uppercase font-black">RETO:</span> ${res}`;
         }
 
