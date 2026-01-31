@@ -4,10 +4,9 @@
 
 window.bibliotecaLogros = [
     {
-        id: "picar",
         name: "¡A Picar!",
         icono: "pickaxe",
-        categoria: "Supervivencia",
+        categoria: "Overworld",
         dificultad: "Facil",
         inventoryNed: ["Pico de madera", "3x Adoquín"],
         objetosOpcionales: ["Antorchas", "Horno"],
@@ -18,7 +17,6 @@ window.bibliotecaLogros = [
         proTip: "La piedra es mucho más eficiente que la madera, ¡mejora cuanto antes!"
     },
     {
-        id: "nether",
         name: "Caminante de Lava",
         icono: "flame",
         categoria: "Nether",
@@ -32,10 +30,9 @@ window.bibliotecaLogros = [
         proTip: "Lleva siempre una pieza de oro puesta para que los Piglins no te ataquen."
     },
     {
-        id: "llegamos",
         name: "Cómo llegamos aquí",
         icono: "flask-conical",
-        categoria: "Desafío",
+        categoria: "End",
         dificultad: "Extrema",
         inventoryNed: ["Pez globo", "Efecto Shulker", "Todas las pociones"],
         objetosOpcionales: ["Armadura de Netherite", "Tótem"],
@@ -46,10 +43,9 @@ window.bibliotecaLogros = [
         proTip: "Usa un reloj de redstone para activar todos los dispensadores al mismo tiempo."
     },
     {
-        id: "cazador",
         name: "Cazador de Monstruos",
         icono: "sword",
-        categoria: "Combate",
+        categoria: "Overworld",
         dificultad: "Facil",
         inventoryNed: ["Espada de hierro", "Escudo"],
         objetosOpcionales: ["Arco", "Flechas"],
@@ -60,10 +56,9 @@ window.bibliotecaLogros = [
         proTip: "Atacar saltando (crítico) hace mucho más daño a los enemigos."
     },
     {
-        id: "liberar-end",
         name: "Liberar el End",
         icono: "trophy",
-        categoria: "The End",
+        categoria: "End",
         dificultad: "Dificil",
         inventoryNed: ["Arco", "Camas", "Perlas de Ender"],
         objetosOpcionales: ["Pociones de caída lenta", "Cristales del End"],
