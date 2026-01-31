@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minecraft Achievements Wiki</title>
+    <title>Minecraft Achievements Wiki | Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Importamos la biblioteca de logros -->
     <script src="logros/biblioteca.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
@@ -17,7 +16,28 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0);
             background-size: 40px 40px;
+            overflow-x: hidden;
         }
+
+        .login-card {
+            background: rgba(24, 24, 27, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .platform-btn {
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .platform-btn:hover {
+            background: rgba(255,255,255,0.05);
+            transform: scale(1.02);
+        }
+
+        .platform-btn.active-java { border-color: #22c55e; background: rgba(34, 197, 94, 0.05); }
+        .platform-btn.active-bedrock { border-color: #3b82f6; background: rgba(59, 130, 246, 0.05); }
 
         .achievement-card {
             background: rgba(24, 24, 27, 0.8);
@@ -39,186 +59,166 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
-        .modal-bg {
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(4px);
-        }
+        .modal-bg { background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(4px); }
+        .category-badge { background: rgba(34, 197, 94, 0.1); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.2); }
+        .pro-tip-box { background: linear-gradient(135deg, rgba(234, 179, 8, 0.1), rgba(234, 179, 8, 0.05)); border: 1px solid rgba(234, 179, 8, 0.2); }
 
-        .category-badge {
-            background: rgba(34, 197, 94, 0.1);
-            color: #22c55e;
-            border: 1px solid rgba(34, 197, 94, 0.2);
-        }
-        
-        .pro-tip-box {
-            background: linear-gradient(135deg, rgba(234, 179, 8, 0.1), rgba(234, 179, 8, 0.05));
-            border: 1px solid rgba(234, 179, 8, 0.2);
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #09090b; }
-        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+        #main-content.hidden { display: none; }
+        #login-screen.hidden { display: none; }
     </style>
 </head>
-<body class="min-h-screen pb-20">
+<body class="min-h-screen">
 
-    <!-- Navegación -->
-    <nav class="glass-nav sticky top-0 z-40 px-6 py-4 mb-12">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="bg-green-500 p-2 rounded-lg">
-                    <i data-lucide="trophy" class="text-black w-5 h-5"></i>
-                </div>
-                <h1 class="text-xl font-black uppercase italic tracking-tighter">Wiki<span class="text-green-500">Logros</span></h1>
+    <!-- Pantalla de Inicio de Sesión -->
+    <div id="login-screen" class="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-[#09090b]">
+        <div class="login-card w-full max-w-md p-10 rounded-[3rem] text-center">
+            <div class="w-20 h-20 bg-green-500 rounded-3xl mx-auto mb-8 flex items-center justify-center shadow-2xl shadow-green-500/20">
+                <i data-lucide="shield-check" class="text-black w-10 h-10"></i>
             </div>
-            <div id="counter" class="text-[10px] font-bold text-gray-500 tracking-widest uppercase">Cargando datos...</div>
-        </div>
-    </nav>
+            <h2 class="text-3xl font-black uppercase italic tracking-tighter mb-2">Bienvenido, <span class="text-green-500">Miner</span></h2>
+            <p class="text-gray-500 text-sm mb-10 uppercase tracking-widest font-bold">Selecciona tu plataforma</p>
+            
+            <div class="space-y-4 mb-10">
+                <button onclick="selectPlatform('java')" id="btn-java" class="platform-btn w-full p-5 rounded-2xl flex items-center justify-between group">
+                    <div class="flex items-center gap-4">
+                        <div class="p-3 bg-green-500/10 rounded-xl group-hover:bg-green-500/20 transition-colors">
+                            <i data-lucide="coffee" class="text-green-500 w-5 h-5"></i>
+                        </div>
+                        <span class="font-bold text-lg uppercase italic tracking-tight">Java Edition</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="text-gray-600"></i>
+                </button>
 
-    <!-- Header -->
-    <header class="max-w-6xl mx-auto px-6 mb-16">
-        <div class="bg-gradient-to-br from-green-500/20 to-transparent p-12 rounded-[3rem] border border-green-500/20">
-            <h2 class="text-5xl md:text-7xl font-black italic uppercase tracking-tighter mb-4">Base de <br><span class="text-green-500">Logros</span></h2>
-            <p class="text-gray-400 max-w-xl text-lg">Haz clic en cualquier tarjeta para ver el tutorial, el inventario necesario y consejos expertos.</p>
-        </div>
-    </header>
+                <button onclick="selectPlatform('bedrock')" id="btn-bedrock" class="platform-btn w-full p-5 rounded-2xl flex items-center justify-between group">
+                    <div class="flex items-center gap-4">
+                        <div class="p-3 bg-blue-500/10 rounded-xl group-hover:bg-blue-500/20 transition-colors">
+                            <i data-lucide="box" class="text-blue-500 w-5 h-5"></i>
+                        </div>
+                        <span class="font-bold text-lg uppercase italic tracking-tight">Bedrock Edition</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="text-gray-600"></i>
+                </button>
+            </div>
 
-    <!-- Grid de Logros -->
-    <main class="max-w-6xl mx-auto px-6">
-        <div id="achievements-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Cargado vía JavaScript -->
+            <button onclick="enterWiki()" id="enter-btn" disabled class="w-full py-5 bg-white/5 text-gray-500 rounded-2xl font-black uppercase tracking-widest text-sm transition-all cursor-not-allowed">
+                Entrar a la Wiki
+            </button>
         </div>
-    </main>
+    </div>
 
-    <!-- Ventana Modal de Detalles -->
-    <div id="logroModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 md:p-6">
+    <!-- Contenido Principal (Wiki) -->
+    <div id="main-content" class="hidden">
+        <nav class="glass-nav sticky top-0 z-40 px-6 py-4 mb-12">
+            <div class="max-w-6xl mx-auto flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="bg-green-500 p-2 rounded-lg"><i data-lucide="trophy" class="text-black w-5 h-5"></i></div>
+                    <h1 class="text-xl font-black uppercase italic tracking-tighter">Wiki<span class="text-green-500">Logros</span></h1>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div id="user-badge" class="px-4 py-1.5 rounded-full border border-white/10 text-[10px] font-black uppercase tracking-tighter flex items-center gap-2 bg-white/5">
+                        <div id="platform-dot" class="w-2 h-2 rounded-full bg-green-500"></div>
+                        <span id="platform-text">JAVA</span>
+                    </div>
+                    <button onclick="logout()" class="p-2 text-gray-500 hover:text-red-500 transition-colors">
+                        <i data-lucide="log-out" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <header class="max-w-6xl mx-auto px-6 mb-16">
+            <div class="bg-gradient-to-br from-green-500/20 to-transparent p-12 rounded-[3rem] border border-green-500/20">
+                <h2 class="text-5xl md:text-7xl font-black italic uppercase tracking-tighter mb-4">Base de <br><span class="text-green-500">Logros</span></h2>
+                <p id="welcome-msg" class="text-gray-400 max-w-xl text-lg tracking-tight italic">Bienvenido de nuevo, jugador de Java.</p>
+            </div>
+        </header>
+
+        <main class="max-w-6xl mx-auto px-6">
+            <div id="achievements-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </main>
+    </div>
+
+    <!-- Modal Detalle (El mismo de antes) -->
+    <div id="logroModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
         <div class="modal-bg absolute inset-0" onclick="closeModal()"></div>
         <div class="bg-[#121214] w-full max-w-2xl rounded-[2.5rem] border border-white/10 relative z-10 overflow-hidden flex flex-col max-h-[90vh]">
-            
-            <!-- Modal Header -->
             <div class="p-8 border-b border-white/5 flex justify-between items-start">
                 <div class="flex gap-4 items-center">
                     <div id="modalIconContainer" class="w-16 h-16 bg-green-500/10 rounded-2xl flex items-center justify-center">
                         <i id="modalIcon" data-lucide="award" class="text-green-500 w-8 h-8"></i>
                     </div>
                     <div>
-                        <span id="modalCategory" class="category-badge px-3 py-1 rounded-full text-[10px] font-black uppercase mb-2 inline-block">Categoría</span>
-                        <h3 id="modalTitle" class="text-3xl font-black italic uppercase tracking-tighter">Título del Logro</h3>
+                        <span id="modalCategory" class="category-badge px-3 py-1 rounded-full text-[10px] font-black uppercase mb-2 inline-block italic">Categoría</span>
+                        <h3 id="modalTitle" class="text-3xl font-black italic uppercase tracking-tighter">Título</h3>
                     </div>
                 </div>
-                <button onclick="closeModal()" class="p-2 hover:bg-white/5 rounded-full transition-colors text-gray-500 hover:text-white">
-                    <i data-lucide="x"></i>
-                </button>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-white"><i data-lucide="x"></i></button>
             </div>
-
-            <!-- Modal Body -->
             <div class="p-8 overflow-y-auto space-y-8">
-                <!-- Inventario -->
                 <div>
-                    <h5 class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 mb-4 flex items-center gap-2">
-                        <i data-lucide="briefcase" class="w-3 h-3"></i> Inventario Necesario
-                    </h5>
-                    <div id="modalInventory" class="flex flex-wrap gap-2">
-                        <!-- Items -->
-                    </div>
+                    <h5 class="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-4 italic">Objetos Sugeridos</h5>
+                    <div id="modalInventory" class="flex flex-wrap gap-2"></div>
                 </div>
-
-                <!-- Tutorial -->
                 <div>
-                    <h5 class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 mb-4 flex items-center gap-2">
-                        <i data-lucide="list-checks" class="w-3 h-3"></i> Paso a Paso
-                    </h5>
-                    <ul id="modalTutorial" class="space-y-3 text-gray-300 text-sm">
-                        <!-- Pasos -->
-                    </ul>
+                    <h5 class="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-4 italic">Guía de paso</h5>
+                    <ul id="modalTutorial" class="space-y-3 text-gray-400 text-sm italic"></ul>
                 </div>
-
-                <!-- Pro Tip -->
-                <div id="modalProTipContainer" class="pro-tip-box p-6 rounded-2xl">
-                    <div class="flex items-center gap-2 text-yellow-500 mb-2">
-                        <i data-lucide="sparkles" class="w-4 h-4"></i>
-                        <span class="text-[10px] font-black uppercase tracking-widest">Consejo Pro</span>
-                    </div>
-                    <p id="modalProTip" class="text-yellow-100/80 text-sm italic leading-relaxed"></p>
+                <div class="pro-tip-box p-6 rounded-2xl italic border-dashed">
+                    <p id="modalProTip" class="text-yellow-100/80 text-sm"></p>
                 </div>
             </div>
-
-            <!-- Modal Footer -->
-            <div class="p-6 bg-white/5 flex justify-between items-center px-8 text-[10px] font-bold text-gray-500 uppercase">
+            <div class="p-6 bg-white/5 flex justify-between items-center px-8 border-t border-white/5">
                 <div id="modalStars" class="flex gap-1"></div>
-                <span>Minecraft Wiki v1.0</span>
             </div>
         </div>
     </div>
 
     <script>
-        // Función para renderizar las estrellas
-        function getStars(difficulty) {
-            let count = 1;
-            const d = difficulty.toLowerCase();
-            if (d === 'media') count = 2;
-            if (d === 'dificil' || d === 'difícil' || d === 'extrema') count = 3;
+        let selectedPlatform = null;
+
+        function selectPlatform(p) {
+            selectedPlatform = p;
+            document.getElementById('btn-java').classList.remove('active-java');
+            document.getElementById('btn-bedrock').classList.remove('active-bedrock');
             
-            let html = '';
-            for(let i = 0; i < 3; i++) {
-                html += `<i data-lucide="star" class="w-3 h-3 ${i < count ? 'text-yellow-500 fill-yellow-500' : 'text-gray-700'}"></i>`;
-            }
-            return html;
+            const btn = document.getElementById(`btn-${p}`);
+            btn.classList.add(`active-${p}`);
+            
+            const enterBtn = document.getElementById('enter-btn');
+            enterBtn.disabled = false;
+            enterBtn.classList.replace('bg-white/5', 'bg-green-500');
+            enterBtn.classList.replace('text-gray-500', 'text-black');
+            enterBtn.classList.remove('cursor-not-allowed');
         }
 
-        // Función para abrir el modal con datos
-        function openLogro(index) {
-            const logro = window.bibliotecaLogros[index];
-            if(!logro) return;
+        function enterWiki() {
+            localStorage.setItem('mc_platform', selectedPlatform);
+            checkAuth();
+        }
 
-            document.getElementById('modalTitle').innerText = logro.name;
-            document.getElementById('modalCategory').innerText = logro.categoria;
-            document.getElementById('modalProTip').innerText = logro.proTip || 'No hay consejos adicionales.';
-            
-            // Icono
-            const iconEl = document.getElementById('modalIcon');
-            iconEl.setAttribute('data-lucide', logro.icono || 'award');
-            
-            // Inventario
-            const invContainer = document.getElementById('modalInventory');
-            invContainer.innerHTML = (logro.inventoryNed || []).map(item => 
-                `<span class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-xl text-xs font-medium text-gray-300">${item}</span>`
-            ).join('');
+        function logout() {
+            localStorage.removeItem('mc_platform');
+            location.reload();
+        }
 
-            // Tutorial
-            const tutContainer = document.getElementById('modalTutorial');
-            tutContainer.innerHTML = (logro.tutorial || []).map(step => 
-                `<li class="flex gap-3 items-start">
-                    <span class="w-5 h-5 bg-green-500/20 text-green-500 text-[10px] font-bold rounded flex items-center justify-center flex-shrink-0 mt-0.5">•</span>
-                    <span>${step}</span>
-                </li>`
-            ).join('');
-
-            // Estrellas
-            document.getElementById('modalStars').innerHTML = getStars(logro.dificultad || 'Facil');
-
-            // Mostrar modal
-            document.getElementById('logroModal').classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; // Evitar scroll de fondo
+        function checkAuth() {
+            const p = localStorage.getItem('mc_platform');
+            if (p) {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('main-content').classList.remove('hidden');
+                document.getElementById('platform-text').innerText = p.toUpperCase();
+                document.getElementById('platform-dot').className = `w-2 h-2 rounded-full ${p === 'java' ? 'bg-green-500' : 'bg-blue-500'}`;
+                document.getElementById('welcome-msg').innerText = `Bienvenido de nuevo, jugador de ${p.charAt(0).toUpperCase() + p.slice(1)}.`;
+                initWiki();
+            } else {
+                document.getElementById('login-screen').classList.remove('hidden');
+            }
             lucide.createIcons();
         }
 
-        function closeModal() {
-            document.getElementById('logroModal').classList.add('hidden');
-            document.body.style.overflow = 'auto';
-        }
-
-        // Cargar logros al inicio
-        function init() {
+        function initWiki() {
             const grid = document.getElementById('achievements-grid');
-            if (!window.bibliotecaLogros) {
-                grid.innerHTML = '<p class="text-red-500">Error: biblioteca.js no cargada.</p>';
-                return;
-            }
-
-            document.getElementById('counter').innerText = `${window.bibliotecaLogros.length} LOGROS SINCRONIZADOS`;
+            if (!window.bibliotecaLogros) return;
 
             grid.innerHTML = window.bibliotecaLogros.map((logro, index) => `
                 <div onclick="openLogro(${index})" class="achievement-card p-8 rounded-[2rem] flex flex-col">
@@ -226,25 +226,41 @@
                         <div class="w-14 h-14 bg-green-500/10 rounded-2xl flex items-center justify-center">
                             <i data-lucide="${logro.icono || 'award'}" class="text-green-500 w-7 h-7"></i>
                         </div>
-                        <span class="category-badge px-3 py-1 rounded-full text-[10px] font-black uppercase">
-                            ${logro.categoria}
-                        </span>
+                        <span class="category-badge px-3 py-1 rounded-full text-[10px] font-black uppercase italic">${logro.categoria}</span>
                     </div>
                     <h4 class="text-2xl font-black italic uppercase mb-2 tracking-tighter">${logro.name}</h4>
-                    <p class="text-gray-400 text-sm line-clamp-2 mb-6">
-                        ${logro.tutorial ? logro.tutorial[0] : 'Haz clic para ver más detalles.'}
-                    </p>
+                    <p class="text-gray-400 text-sm line-clamp-2 mb-6 italic">${logro.tutorial ? logro.tutorial[0] : ''}</p>
                     <div class="mt-auto pt-6 border-t border-white/5 flex justify-between items-center">
-                        <div class="flex gap-1">${getStars(logro.dificultad || 'Facil')}</div>
-                        <i data-lucide="chevron-right" class="w-4 h-4 text-gray-600"></i>
+                        <div class="flex gap-1">${getStars(logro.dificultad)}</div>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-gray-700"></i>
                     </div>
                 </div>
             `).join('');
-
             lucide.createIcons();
         }
 
-        window.addEventListener('DOMContentLoaded', init);
+        function getStars(diff) {
+            let count = diff === 'Media' ? 2 : (diff === 'Dificil' || diff === 'Extrema' ? 3 : 1);
+            let html = '';
+            for(let i=0; i<3; i++) html += `<i data-lucide="star" class="w-3 h-3 ${i<count?'text-yellow-500 fill-yellow-500':'text-gray-800'}"></i>`;
+            return html;
+        }
+
+        function openLogro(i) {
+            const l = window.bibliotecaLogros[i];
+            document.getElementById('modalTitle').innerText = l.name;
+            document.getElementById('modalCategory').innerText = l.categoria;
+            document.getElementById('modalProTip').innerText = l.proTip;
+            document.getElementById('modalInventory').innerHTML = l.inventoryNed.map(i => `<span class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-xl text-xs font-medium text-gray-400 italic">${i}</span>`).join('');
+            document.getElementById('modalTutorial').innerHTML = l.tutorial.map(s => `<li class="flex gap-3"><span>•</span><span>${s}</span></li>`).join('');
+            document.getElementById('modalStars').innerHTML = getStars(l.dificultad);
+            document.getElementById('logroModal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeModal() { document.getElementById('logroModal').classList.add('hidden'); }
+
+        window.onload = checkAuth;
     </script>
 </body>
 </html>
