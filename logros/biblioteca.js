@@ -1,73 +1,29 @@
-// Esta es tu base de datos central de logros.
-// Clasificación:
-// Bedrock: true -> Solo Bedrock
-// Java: true -> Solo Java
-// Else -> Ambas plataformas
+// IMPORTANTE: Para que el index.html lo detecte sin usar módulos complejos,
+// definimos la variable en el objeto global 'window'.
 
 window.bibliotecaLogros = [
     {
         name: "¡A Picar!",
-        icono: "pickaxe",
         categoria: "Overworld",
-        dificultad: "Facil",
-        Else: true, // Disponible en ambas plataformas
-        inventoryNed: ["Pico de madera", "3x Adoquín"],
-        tutorial: [
-            "Baja a la capa de piedra y extrae adoquín.",
-            "Mejora tu equipo a herramientas de piedra para picar más rápido."
-        ],
-        proTip: "La piedra es mucho más eficiente que la madera, ¡mejora cuanto antes!"
+        dificultad: "Fácil",
+        Else: true,
+        inventoryNed: ["Pico de madera", "Adoquín"],
+        tutorial: ["Busca piedra en cuevas", "Extrae 3 bloques"]
     },
     {
-        name: "Caminante de Lava",
-        icono: "flame",
-        categoria: "Nether",
+        name: "Exclusivo Bedrock",
+        categoria: "Skins",
         dificultad: "Media",
-        Else: true, // Disponible en ambas plataformas
-        inventoryNed: ["10x Obsidiana", "Mechero", "Armadura de Oro"],
-        tutorial: [
-            "Construye un marco de obsidiana y enciéndelo con el mechero.",
-            "Entra al portal para acceder a la dimensión del Nether."
-        ],
-        proTip: "Lleva siempre una pieza de oro puesta para que los Piglins no te ataquen."
-    },
-    {
-        name: "Exclusivo de Bedrock",
-        icono: "smartphone",
-        categoria: "Overworld",
-        dificultad: "Facil",
-        Bedrock: true, // Solo Bedrock
-        inventoryNed: ["Pantalla táctil", "Controlador"],
-        tutorial: [
-            "Este logro solo se ve en la versión de Bedrock.",
-            "¡Prueba las funciones exclusivas de esta versión!"
-        ],
-        proTip: "En Bedrock puedes colocar bloques frente a ti mientras corres."
+        Bedrock: true,
+        inventoryNed: ["Capa"],
+        tutorial: ["Usa el creador de personajes"]
     },
     {
         name: "Cómo llegamos aquí",
-        icono: "flask-conical",
-        categoria: "End",
+        categoria: "Desafío",
         dificultad: "Extrema",
-        Java: true, // Solo Java
+        Java: true,
         inventoryNed: ["Pez globo", "Efecto Shulker", "Todas las pociones"],
-        tutorial: [
-            "Recibe todos los efectos de estado simultáneamente.",
-            "Requiere una preparación compleja con dispensadores y mobs específicos."
-        ],
-        proTip: "Usa un reloj de redstone para activar todos los dispensadores al mismo tiempo."
-    },
-    {
-        name: "Liberar el End",
-        icono: "trophy",
-        categoria: "End",
-        dificultad: "Dificil",
-        Else: true, // Disponible en ambas plataformas
-        inventoryNed: ["Arco", "Camas", "Perlas de Ender"],
-        tutorial: [
-            "Viaja al End y derrota a la Dragona.",
-            "Destruye los cristales de las torres antes de atacar directamente."
-        ],
-        proTip: "Las camas explotan en el End; úsalas debajo de la dragona para ganar rápido."
+        tutorial: ["Lleva un Shulker al mundo normal", "Recibe todos los efectos al mismo tiempo"]
     }
 ];
